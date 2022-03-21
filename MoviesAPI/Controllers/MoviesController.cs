@@ -12,23 +12,30 @@ namespace MoviesAPI.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly IMoviesAPIService movieAPIService;
-        private readonly MovieDbContext _movieDbContext;
 
-        public MoviesController (MovieDbContext movieDbContext, IMoviesAPIService _movieAPIService)
+        public MoviesController (IMoviesAPIService _movieAPIService)
         {
-            _movieDbContext = movieDbContext;
             movieAPIService = _movieAPIService;
         }
 
         [HttpGet]
-        public ActionResult<List<Movie>> GetAllMovies() 
+        public IActionResult GetAllMovies() 
         {
-            return movieAPIService.GetMovies();
+            try
+            {
+                var result = movieAPIService.GetMovies();
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return ExceptionHandler(ex, ex.Message);
+            }
+            
         }
 
 
         [HttpGet("{movieId}")]
-        public ActionResult<Movie> GetMovieById(int movieId)
+        public IActionResult GetMovieById(int movieId)
         {
             var movie = movieAPIService.GetMovieById(movieId);
             if(movie == null)
@@ -42,8 +49,8 @@ namespace MoviesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public IActionResult CreateMovie([FromBody] Movie movie)
         {
-            // If movie is null, then return
-            if (movie == null)
+            // If movie is null or model is invalid, then return
+            if (movie == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -55,15 +62,15 @@ namespace MoviesAPI.Controllers
             }
             catch (Exception ex)
             {
-                return ExceptionHandler(ex);
+                return BadRequest("Invalid Model");
             }
         }
 
         [HttpPut]
-        public IActionResult EditMovie([FromBody] Movie movie)
+        public IActionResult UpdateMovie([FromBody] Movie movie)
         {
             // If movie is null, then return
-            if (movie == null)
+            if (movie == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -71,15 +78,15 @@ namespace MoviesAPI.Controllers
             try
             {
                 movieAPIService.UpdateMovie(movie);
-                return Ok();
+                return Accepted("Updated the movie");
             }
             catch(Exception ex)
             {
-                return ExceptionHandler(ex);
+                return ExceptionHandler(ex, ex.Message);
             }
         }
 
-        private IActionResult ExceptionHandler(Exception ex)
+        private IActionResult ExceptionHandler(Exception ex, string message)
         {
             switch (ex)
             {

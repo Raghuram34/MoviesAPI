@@ -11,7 +11,9 @@ namespace MoviesAPI.Models
         [Required]
         public string ActorName { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
+        public string Bio { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
         public ICollection<Movie>? Movies { get; set; }
     }
 }

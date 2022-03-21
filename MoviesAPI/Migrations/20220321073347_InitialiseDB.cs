@@ -15,7 +15,8 @@ namespace MoviesAPI.Migrations
                 {
                     ActorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ActorName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ActorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,7 +29,9 @@ namespace MoviesAPI.Migrations
                 {
                     ProducerId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProducerName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProducerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Company = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,6 +46,7 @@ namespace MoviesAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MovieName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfRelease = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Plot = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProducerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

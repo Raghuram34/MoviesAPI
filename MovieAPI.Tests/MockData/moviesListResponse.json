@@ -1,0 +1,23 @@
+[
+  {
+    "movieId": 1,
+    "movieName": "Titanic",
+    "dateOfRelease": "1997-03-12T00:00:00",
+    "plot": "string",
+    "producer": {
+      "producerId": 1,
+      "producerName": "James Cameron",
+      "bio": "James Francis Cameron CC is a Canadian filmmaker",
+      "company": "Paramount Pictures",
+      "movies": []
+    },
+    "actors": [
+      {
+        "actorId": 1,
+        "actorName": "Leonardo Dicaprio",
+        "bio": "Leonardo Wilhelm DiCaprio is an American actor and film producer. ",
+        "movies": []
+      }
+    ]
+  }
+]

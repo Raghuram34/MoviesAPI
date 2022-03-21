@@ -12,7 +12,11 @@ namespace MoviesAPI.Models
         [Required]
         public string ProducerName { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
+        public string Bio { get; set; }
+
+        public string Company { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
         public ICollection<Movie>? Movies { get; set; }
     }
 }

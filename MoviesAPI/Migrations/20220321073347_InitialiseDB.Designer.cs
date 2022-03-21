@@ -12,7 +12,7 @@ using MoviesAPI.Data;
 namespace MoviesAPI.Migrations
 {
     [DbContext(typeof(MovieDbContext))]
-    [Migration("20220321031336_InitialiseDB")]
+    [Migration("20220321073347_InitialiseDB")]
     partial class InitialiseDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,10 @@ namespace MoviesAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ActorId");
 
                     b.ToTable("Actors");
@@ -71,6 +75,10 @@ namespace MoviesAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Plot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ProducerId")
                         .HasColumnType("int");
 
@@ -88,6 +96,14 @@ namespace MoviesAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProducerId"), 1L, 1);
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Company")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProducerName")
                         .IsRequired()

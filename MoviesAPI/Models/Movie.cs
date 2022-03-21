@@ -15,10 +15,12 @@ namespace MoviesAPI.Models
         [DataType(DataType.Date)]
         public DateTime DateOfRelease { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] 
+        public string Plot { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)] 
         public Producer Producer { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
         public ICollection<Actor>? Actors { get; set; }
     }
 }
