@@ -5,6 +5,10 @@ using MoviesAPI.Services.Abstractions;
 
 namespace MoviesAPI.Services
 {
+    /** <summary>
+     * Implements the interface IMoviesAPIService
+     * </summary>
+     */
     public class MoviesAPIService : IMoviesAPIService
     {
 
@@ -37,7 +41,7 @@ namespace MoviesAPI.Services
                                 .Include(p => p.Movies)
                                 .Where(p => movie.Producer.ProducerId == p.ProducerId)
                                 .FirstOrDefault();
-
+            // Load Actors whose profile is created. 
             movie.Actors = FindActorsById(movie.Actors.ToList());
             movieDbContext.Movies.Add(movie);
             movieDbContext.SaveChanges();
@@ -51,7 +55,7 @@ namespace MoviesAPI.Services
             // If movie not existed, then throw exception
             if(movieToUpdate == null)
             {
-                throw new KeyNotFoundException("No movie found with this Id");
+                throw new KeyNotFoundException("No such movie found with this Id");
             }
             // Find producer object by id in database to map correctly
             movie.Producer = FindProducerById(movie.Producer);

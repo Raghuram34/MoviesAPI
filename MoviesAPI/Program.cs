@@ -16,10 +16,6 @@ builder.Services.AddControllers()
 
 builder.Services.AddSingleton<IMoviesAPIService, MoviesAPIService>();
 
-/* builder.Services.AddDbContext<MovieDbContext>(opt =>
-        opt.UseInMemoryDatabase("MovieDatabaseString")
-    ); */
-
 builder.Services
     .AddDbContext<MovieDbContext>(options => {
         options.UseSqlServer(builder.Configuration.GetConnectionString("MovieDatabaseString"))

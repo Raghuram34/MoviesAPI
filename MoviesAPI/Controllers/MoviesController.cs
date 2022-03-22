@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MoviesAPI.Data;
 using MoviesAPI.Models;
 using MoviesAPI.Services.Abstractions;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using MoviesAPI.Filters;
 
 namespace MoviesAPI.Controllers
 {
+    [CustomExceptionFilter]
     [Route("api/[controller]")]
     [ApiController]
     public class MoviesController : ControllerBase
@@ -17,23 +16,16 @@ namespace MoviesAPI.Controllers
         {
             movieAPIService = _movieAPIService;
         }
-
+        
+        // GET: /api/{controller}
         [HttpGet]
         public IActionResult GetAllMovies() 
         {
-            try
-            {
-                var result = movieAPIService.GetMovies();
-                return Ok(result);
-            }
-            catch(Exception ex)
-            {
-                return ExceptionHandler(ex, ex.Message);
-            }
-            
+            var result = movieAPIService.GetMovies();
+            return Ok(result);         
         }
 
-
+        // GET: /api/{controller}/{movieId}
         [HttpGet("{movieId}")]
         public IActionResult GetMovieById(int movieId)
         {
@@ -45,6 +37,7 @@ namespace MoviesAPI.Controllers
             return Ok(movie);
         }
 
+        // POST: /api/{controller}
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public IActionResult CreateMovie([FromBody] Movie movie)
@@ -52,50 +45,25 @@ namespace MoviesAPI.Controllers
             // If movie is null or model is invalid, then return
             if (movie == null || !ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest("Movie Object is either null or Invalid");
             }
 
-            try
-            {
-                movieAPIService.CreateMovie(movie);
-                return StatusCode(StatusCodes.Status201Created, new { message = "Movie is successfully created." });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Invalid Model");
-            }
+            movieAPIService.CreateMovie(movie);
+            return StatusCode(StatusCodes.Status201Created, new { message = "Movie is successfully created." });
         }
 
+        // PUT: /api/{controller}
         [HttpPut]
         public IActionResult UpdateMovie([FromBody] Movie movie)
         {
             // If movie is null, then return
             if (movie == null || !ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest("Movie Object is either null or Invalid");
             }
 
-            try
-            {
-                movieAPIService.UpdateMovie(movie);
-                return Accepted("Updated the movie");
-            }
-            catch(Exception ex)
-            {
-                return ExceptionHandler(ex, ex.Message);
-            }
+            movieAPIService.UpdateMovie(movie);
+            return Accepted("Updated the movie");
         }
-
-        private IActionResult ExceptionHandler(Exception ex, string message)
-        {
-            switch (ex)
-            {
-                case KeyNotFoundException:
-                    return BadRequest(ex.Message);
-                default:
-                    return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
     }
 }

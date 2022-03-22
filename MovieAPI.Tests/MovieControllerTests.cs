@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using MoviesAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using FluentAssertions;
+using MoviesAPI.Filters;
+using System;
 
 namespace MovieAPI.Tests
 {
@@ -56,12 +59,11 @@ namespace MovieAPI.Tests
             // SETUP
             mockMovieAPIService
                 .Setup(service => service.GetMovies())
-                .Throws(new KeyNotFoundException());
+                .Throws(new InvalidOperationException());
 
             // ACT
-            var result = moviesController.GetAllMovies() as ObjectResult;
+            Assert.Throws<InvalidOperationException>(() => moviesController.GetAllMovies());
 
-            Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]
@@ -76,9 +78,7 @@ namespace MovieAPI.Tests
                 .Throws(new InvalidDataException());
 
             // ACT
-            var result = moviesController.CreateMovie(new Mock<Movie>().Object) as ObjectResult;
-
-            Assert.Equal(400, result.StatusCode);
+             Assert.Throws<InvalidDataException>(() => moviesController.CreateMovie(new Mock<Movie>().Object));
         }
 
         [Fact]
@@ -109,9 +109,8 @@ namespace MovieAPI.Tests
                 .Throws(new KeyNotFoundException());
 
             // ACT
-            var result = moviesController.UpdateMovie(new Mock<Movie>().Object) as ObjectResult;
+            Assert.Throws<KeyNotFoundException>(() => moviesController.UpdateMovie(new Mock<Movie>().Object));
 
-            Assert.Equal(400, result.StatusCode);
         }
 
         [Fact]

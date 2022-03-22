@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using MoviesAPI.Filters;
 using MoviesAPI.Models;
 using MoviesAPI.Services.Abstractions;
 
 namespace MoviesAPI.Controllers
 {
+    [CustomExceptionFilter]
     [Route("api/[controller]")]
     [ApiController]
     public class ActorController : ControllerBase
@@ -15,13 +16,21 @@ namespace MoviesAPI.Controllers
         {
             movieAPIService = _movieAPIService;
         }
-
+        
+        // GET: /api/{controller}
         [HttpGet]
         public List<Actor> GetActors()
         {
-            return movieAPIService.GetActors();
+            var response = movieAPIService.GetActors();
+            response.ForEach(res =>
+            {
+                res.Movies.Select(m => new { m.DateOfRelease, m.MovieName, m.MovieId, m.Plot });
+            });
+            return response;
         }
 
+
+        // POST: /api/{controller}
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public IActionResult AddActor([FromBody] Actor actor)
@@ -32,27 +41,8 @@ namespace MoviesAPI.Controllers
                 return BadRequest();
             }
 
-            try
-            {
-                movieAPIService.CreateActor(actor);
-                return StatusCode(StatusCodes.Status201Created, new { message = "Actor is successfully created." });
-            }
-            catch (Exception ex)
-            {
-                return ExceptionHandler(ex);
-            }
-        }
-
-
-        private IActionResult ExceptionHandler(Exception ex)
-        {
-            switch (ex)
-            {
-                case KeyNotFoundException:
-                    return BadRequest(ex.Message);
-                default:
-                    return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            movieAPIService.CreateActor(actor);
+            return StatusCode(StatusCodes.Status201Created, new { message = "Actor is successfully created." });
         }
     }
 }

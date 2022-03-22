@@ -16,7 +16,7 @@ namespace MoviesAPI.Models
 
         public string Company { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public ICollection<Movie>? Movies { get; set; }
     }
 }

@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MoviesAPI.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using MoviesAPI.Filters;
 using MoviesAPI.Models;
 using MoviesAPI.Services.Abstractions;
 
 namespace MoviesAPI.Controllers
 {
+    [CustomExceptionFilter]
     [Route("api/[controller]")]
     [ApiController]
     public class ProducersController : ControllerBase
@@ -18,12 +17,14 @@ namespace MoviesAPI.Controllers
             movieAPIService = _movieAPIService;
         }
 
+        // GET: /api/{controller}
         [HttpGet]
         public List<Producer> GetProducers()
         {
             return movieAPIService.GetProducers();
         }
 
+        // POST: /api/{controller}
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public IActionResult AddActor([FromBody] Producer producer)
@@ -34,26 +35,8 @@ namespace MoviesAPI.Controllers
                 return BadRequest();
             }
 
-            try
-            {
-                movieAPIService.CreateProducer(producer);
-                return StatusCode(StatusCodes.Status201Created, new { message = "Producer is successfully created." });
-            }
-            catch (Exception ex)
-            {
-                return ExceptionHandler(ex);
-            }
-        }
-
-        private IActionResult ExceptionHandler(Exception ex)
-        {
-            switch (ex)
-            {
-                case KeyNotFoundException:
-                    return BadRequest(ex.Message);
-                default:
-                    return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            movieAPIService.CreateProducer(producer);
+            return StatusCode(StatusCodes.Status201Created, new { message = "Producer is successfully created." });
         }
     }
 }
