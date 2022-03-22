@@ -18,7 +18,7 @@ namespace MoviesAPI.Models
         public string Plot { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] 
-        public Producer Producer { get; set; }
+        public Producer? Producer { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public ICollection<Actor>? Actors { get; set; }

@@ -21,7 +21,8 @@ namespace MoviesAPI.Controllers
         [HttpGet]
         public List<Producer> GetProducers()
         {
-            return movieAPIService.GetProducers();
+            var response = movieAPIService.GetProducers();
+            return response;
         }
 
         // POST: /api/{controller}

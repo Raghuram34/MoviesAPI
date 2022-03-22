@@ -22,10 +22,6 @@ namespace MoviesAPI.Controllers
         public List<Actor> GetActors()
         {
             var response = movieAPIService.GetActors();
-            response.ForEach(res =>
-            {
-                res.Movies.Select(m => new { m.DateOfRelease, m.MovieName, m.MovieId, m.Plot });
-            });
             return response;
         }
 
